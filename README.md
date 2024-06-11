@@ -1,5 +1,5 @@
 # <!--ここにアプリ名を入力-->
-BOOK MATE
+BOOK MATCH
 ## サイト概要
 ### サイトテーマ
 本と人間を繋げるレビューサイト
@@ -44,6 +44,8 @@ BOOK MATE
 <!-- 【補足説明】 -->
 <!-- - テーマ提出時点では不要です。 -->
 <!-- - 当項目には「後ほど作成予定」と記載しましょう。 -->
+##実装機能チェックシートURL
+https://docs.google.com/spreadsheets/d/13kMWZorX5h-7_mHLuHUQeO1bh7i0gve0sJceV8Re95A/edit?usp=sharing
 ​
 ## 開発環境
 - OS：Linux(CentOS)
