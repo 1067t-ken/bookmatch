@@ -1,0 +1,31 @@
+<%= form_with url: books_path, method: :get do |f| %>
+  <%= f.search_field :keyword, value: params[:keyword] %>
+  <%= f.select :tag, [["tag1", 1], ["tag2", 2], ["tag3", 3]] %>
+  <%= f.submit "search" %>
+<% end %>
+
+<% if @books.any? %>
+  <%= @books.first.attributes %>
+<% end %>
+
+<% @books.each do |book| %>
+  <ul>
+    <li><%= book.isbn %></li>
+    <li><%= link_to book.title, book_path(book.isbn) %></li>
+    <li><%= book.title_kana %></li>
+    <li><%= image_tag book.large_image_url %></li>
+    <li><%= book.item_price %>円</li>
+    <li><%= link_to book.item_url, book.item_url %></li>
+  </ul>
+  <hr>
+<% end %>
+
+<% if @users.present? %>
+  <% @users.each do |user| %>
+    <ul>
+      <li><%= user.name %></li>
+    </ul>
+  <% end %>
+  <%= paginate @users %>
+<% else %>
+<% end %>

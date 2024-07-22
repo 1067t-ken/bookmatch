@@ -1,0 +1,19 @@
+# == Schema Information
+#
+# Table name: books
+#
+#  id         :integer          not null, primary key
+#  isbn       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_books_on_isbn  (isbn)
+#
+
+one:
+  isbn: MyString
+
+two:
+  isbn: MyString

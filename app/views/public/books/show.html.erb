@@ -1,0 +1,41 @@
+<%= @book.inspect %>
+
+<table class="table table-bordered">
+  <tbody>
+    <tr>
+      <th>title</th>
+      <td><%= @book.title %></td>
+    </tr>
+    <tr>
+      <th>author</th>
+      <td><%= @book.author %></td>
+    </tr>
+  </tbody>
+</table>
+
+<% @tags.each do |tag| %>
+  <span class="badge badge-secondary"><%= tag.name %></span>
+<% end %>
+
+<%= form_with model: Book.find_or_initialize_by(isbn: @book.isbn) do |f| %>
+  <%= f.hidden_field :isbn, value: @book.isbn %>
+  <%= f.text_field :tags_to_s %>
+  <%= f.submit "タグ付けする" %>
+  <% record_book = Book.find_by(isbn: @book.isbn) %>
+  <% if current_user %>
+    <% if record_book&.favorited_by?(current_user) %>
+      <p>
+        <%= link_to book_favorite_path(@book.isbn), method: :delete do %>
+          ♥<%= record_book&.favorites&.count %> いいね
+        <% end %>
+      </p>
+      <% else %>
+      <p>
+        <%= link_to book_favorite_path(@book.isbn), method: :post do %>
+          ♡<%= record_book&.favorites&.count %> いいね
+        <% end %>
+      </p>
+    <% end %>
+  <% end %>
+<% end %>
+
