@@ -1,12 +1,71 @@
 class Public::UsersController < ApplicationController
-    def index
-     @users = User.all.page(params[:page]).per(5)
-     @user = current_user
+  before_action :authenticate_user!, only: [:edit, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update, :destroy]
+  
+  def index
+   @users = User.all.page(params[:page]).per(5)
+   @user = current_user
+  end
+    
+  def show
+    @user = User.find(params[:id])
+    isbns = @user.books.pluck(:isbn)
+    @books = []
+    isbns.each do |isbn|
+      result = RakutenWebService::Books::Book.search(isbn: isbn.to_i)
+      @books << result.first
+      @books = Kaminari.paginate_array(@books).page(params[:page]).per(5)
     end
-    def show
-     @user = current_user
-     @post_images = @user.post_images
+  end
+  
+  def edit
+  end
+    
+  def update
+    if @user.update(user_params)
+      flash[:notice] = "変更しました。"
+      redirect_to user_path(@user)
+    else
+      flash.now[:alert] = "変更に失敗しました。"
+      render :edit
     end
-    def edit
+  end
+  
+  def destroy
+    @user.destroy
+    flash[:success] = "退会しました。"
+    redirect_to root_path
+  end
+  
+  def favorites
+    @user = User.find(params[:id])
+    isbns = @user.favorite_books.pluck(:isbn)
+    @books = []
+    isbns.each do |isbn|
+      result = RakutenWebService::Books::Book.search(isbn: isbn.to_i)
+      @books << result.first
+      @books = Kaminari.paginate_array(@books).page(params[:page]).per(5)
     end
+  end
+  
+  def followings
+    @user = User.find(params[:id])
+    @users = @user.followings.page(params[:page])
+  end
+  
+  def followers
+    @user = User.find(params[:id])
+    @users = @user.followers.page(params[:page])
+  end
+  
+  private
+  
+  def user_params
+    params.require(:user).permit(:name, :email)
+  end
+  
+  def correct_user
+    @user = User.find_by_id(params[:id])
+    redirect_to roote_url unless @user == current_user
+  end
 end

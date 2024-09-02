@@ -1,1 +1,16 @@
 @use '~bootstrap/scss/bootstrap';
+
+@media (width < 767px) {
+  .border-md-left {
+    border-left: 0!important;
+    border-top: 1px solid #dee2e6!important ;
+  }
+}
+
+.custom-navbar {
+  background-color: #17a2b8; 
+  color: white;
+}
+.custom-navbar .navbar-brand span {
+  color: white !important;
+}

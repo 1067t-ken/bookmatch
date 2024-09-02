@@ -10,6 +10,7 @@ import "channels"
 import "jquery";
 import "popper.js";
 import "bootstrap";
+import "jquery-raty-js";
 import "../stylesheets/application"; 
 
 Rails.start()

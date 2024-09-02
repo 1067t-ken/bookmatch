@@ -1,0 +1,22 @@
+<% if books.any? %>
+  <div class="row">
+    <% books.each do |book| %>
+      <div class="col-sm-12 col-md-6 col-lg-4">
+        <div class="card mb-3">
+          <div class="card-img-top">
+            <%= image_tag book.large_image_url, style: "width:100%;height:250px;object-fit:contain;" %>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title mb-4" style="height:2em;"><%= link_to truncate(book.title, length: 30), book_path(book.isbn) %></h5>
+            <p class="card-text mb-3" style="height:2em;">著者: <%= truncate(book.author, length: 40) %></p>
+            <p class="card-text">isbnコード: <%= book.isbn %></p>
+            <p class="card-text">価格: <%= book.item_price %>円</p>
+            <p class="card-text">URL: <%= link_to book.item_url, book.item_url %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <h4 class="mt-5">該当する情報がありません。</h4>
+<% end %>

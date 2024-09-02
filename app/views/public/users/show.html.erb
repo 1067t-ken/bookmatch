@@ -1,13 +1,15 @@
-<div>
-  <h3><%= @user.name %></h3>
-  <%= image_tag @user.get_profile_image(100,100) %>
+<h1>レビュー済みの本一覧</h1>
+
+<div class="row">
+  <div class="col-md-3">
+    <%= render 'public/users/info', user: @user %>
+  </div>
+  
+  <div class="col-md-9">
+    <%= render 'public/books/books', books: @books %>
+  </div>
 </div>
 
-<div>
-  <%= link_to post_image_path(post_image.id) do %>
-    <%= image_tag post_image.get_image %>
-  <% end %>
-  <p>説明：<%= post_image.caption %></p>
-  <p>ユーザーネーム：<%= post_image.user.name %></p>
-</div>
+<% if admin_signed_in? %>
+  <%= link_to '退会させる', admin_user_path(@user), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
 <% end %>

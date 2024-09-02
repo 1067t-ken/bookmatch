@@ -11,8 +11,11 @@ class Public::BooksController < ApplicationController
   end
   
   def show
+    @local_book = Book.find_by(isbn: params[:isbn])
     @book = RakutenWebService::Books::Book.search(isbn: params[:isbn]).first
     @tags = Tag.includes(:book_tags).where("book_tags.book_id": (Book.find_by(isbn: params[:isbn])&.id || 0))
+    @review = current_user.reviews.find_by(book_id: @local_book&.id) || Review.new
+    @average = @local_book&.reviews&.average(:star) || 0
     #@books = Kaminari.paginate_array(books_result.to_a).page(params[:page]).per(5)
   end
   

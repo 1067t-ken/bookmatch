@@ -1,41 +1,128 @@
-<%= @book.inspect %>
+<%#= @book.inspect %>
+<h1 class="my-4">書籍詳細情報</h1>
 
-<table class="table table-bordered">
-  <tbody>
-    <tr>
-      <th>title</th>
-      <td><%= @book.title %></td>
-    </tr>
-    <tr>
-      <th>author</th>
-      <td><%= @book.author %></td>
-    </tr>
-  </tbody>
-</table>
-
-<% @tags.each do |tag| %>
-  <span class="badge badge-secondary"><%= tag.name %></span>
-<% end %>
-
-<%= form_with model: Book.find_or_initialize_by(isbn: @book.isbn) do |f| %>
-  <%= f.hidden_field :isbn, value: @book.isbn %>
-  <%= f.text_field :tags_to_s %>
-  <%= f.submit "タグ付けする" %>
-  <% record_book = Book.find_by(isbn: @book.isbn) %>
-  <% if current_user %>
-    <% if record_book&.favorited_by?(current_user) %>
-      <p>
-        <%= link_to book_favorite_path(@book.isbn), method: :delete do %>
-          ♥<%= record_book&.favorites&.count %> いいね
+<div class="row">
+  <div class="col-md-4 mb-3">
+    <%= image_tag @book.large_image_url %>
+  </div>
+  <div class="col-md-8">
+    <div>
+      <table>
+        <tbody>
+          <tr></tr>
+          <tr>
+            <th>タイトル</th>
+            <td><%= @book.title %></td>
+          </tr>
+          <tr>
+            <th>著者</th>
+            <td><%= @book.author %></td>
+          </tr>
+          <tr>
+            <th>価格</th>
+            <td><%= @book.item_price %>円</td>
+          </tr>
+          <tr>
+            <th>ISBNコード</th>
+            <td><%= @book.isbn %></td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td><%= @book.item_url %></td>
+          </tr>
+          <% if @local_book %>
+            <tr>
+              <th>平均評価(<%= @average %>)</th>
+              <td><span id="ave-star"></span></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-3">
+      <% @tags.each do |tag| %>
+        <span class="badge badge-secondary"><%= tag.name %></span>
+      <% end %>
+        
+      <%= form_with model: Book.find_or_initialize_by(isbn: @book.isbn) do |f| %>
+        <%= f.hidden_field :isbn, value: @book.isbn %>
+        <%= f.text_field :tags_to_s %>
+        <%= f.submit "タグ付けする" %>
+      <% end %>
+    </div>
+    <div>
+      <% record_book = Book.find_by(isbn: @book.isbn) %>
+      <% if current_user %>
+        <% if record_book&.favorited_by?(current_user) %>
+          <p>
+            <%= link_to book_favorite_path(@book.isbn), method: :delete do %>
+              ♥<%= record_book&.favorites&.count %> いいね
+            <% end %>
+          </p>
+        <% else %>
+          <p>
+            <%= link_to book_favorite_path(@book.isbn), method: :post do %>
+              ♡<%= record_book&.favorites&.count %> いいね
+            <% end %>
+          </p>
         <% end %>
-      </p>
-      <% else %>
-      <p>
-        <%= link_to book_favorite_path(@book.isbn), method: :post do %>
-          ♡<%= record_book&.favorites&.count %> いいね
-        <% end %>
-      </p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="border-bottom my-4"></div>
+
+<div class="row">
+  <div class="col-md-6 pt-2 mb-4">
+    <h2>レビューを書く</h2>
+    <% if current_user %>
+      <%= form_with model: @review, local: true, method: :post, url: reviews_path(isbn: @book.isbn) do |form| %>
+        <%= hidden_field_tag :isbn, @book.isbn %>
+        <div class="mb-2">
+          <div id="star"></div>
+        </div>
+        <div class="mb-2">
+          <%= form.label :content %>
+          <%= form.text_area :content, class: "form-control" %>
+        </div>
+        <div class="my-4">
+          <%= form.submit 'Submit Review', class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    <% else %>
+      <p>You cannot add a review for this book.</p>
+    <% end %> 
+  </div>
+  <div class="col-md-6 pt-4 pt-md-2 border-left border-md-left">
+    <h2>レビュー</h2>
+    <% if @local_book %>
+      <%= render @local_book.reviews %>
+    <% else %>
+      <p>No reviews available.</p>
     <% end %>
-  <% end %>
-<% end %>
+  </div>
+</div>
+
+<script>
+  $('#star').empty();
+  $('#star').raty({
+    starOn: '<%= asset_path('star-on.png') %>',
+    starOff: '<%= asset_path('star-off.png') %>',
+    starHalf: '<%= asset_path('star-half.png') %>',
+    scoreName: 'review[star]',
+    score: '<%= @review&.star || 0 %>'
+  })
+  
+  $('#ave-star').empty();
+  $('#ave-star').raty({
+    starOn: '<%= asset_path('star-on.png') %>',
+    starOff: '<%= asset_path('star-off.png') %>',
+    starHalf: '<%= asset_path('star-half.png') %>',
+    readOnly: true,
+    harf: true,
+    score: '<%= @average %>'
+  })
+</script>
+
 

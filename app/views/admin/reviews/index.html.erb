@@ -1,0 +1,27 @@
+<h1>レビュー一覧</h1>
+
+<%= form_with url: admin_reviews_path, method: :get do |f| %>
+  <%= f.search_field :keyword, value: params[:keyword] %>
+  <%= f.submit %>
+<% end %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>評価</th>
+      <th>レビュー内容</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @reviews.each do |review| %>
+      <tr>
+        <td><%= review.id %></td>
+        <td><%= review.star %></td>
+        <td><%= review.content %></td>
+        <td><%= link_to "削除", admin_review_path(review), method: :delete, data: { confirm: "本当に削除しますか？" } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

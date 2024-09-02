@@ -1,0 +1,21 @@
+<div class="review">
+  <p>
+    <strong>Rating:</strong>
+    <div id="show-star-<%= review.id %>"></div>
+  </p>
+  <p>
+    <strong>Comment:</strong>
+    <%= review.content %>
+  </p>
+</div>
+
+<script>
+  $('#show-star-<%= review.id %>').empty();
+  $('#show-star-<%= review.id %>').raty({
+    starOn: '<%= asset_path('star-on.png') %>',
+    starOff: '<%= asset_path('star-off.png') %>',
+    starHalf: '<%= asset_path('star-half.png') %>',
+    readOnly: true,
+    score: '<%= review.star %>'
+  })
+</script>

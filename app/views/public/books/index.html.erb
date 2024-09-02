@@ -1,24 +1,35 @@
-<%= form_with url: books_path, method: :get do |f| %>
-  <%= f.search_field :keyword, value: params[:keyword] %>
-  <%= f.select :tag, [["tag1", 1], ["tag2", 2], ["tag3", 3]] %>
-  <%= f.submit "search" %>
-<% end %>
+<div class="row my-3">
+  <div class="col-md-8 offset-md-2">
+    <%= form_with url: books_path, method: :get do |f| %>
+      <div class="d-flex">
+        <%= f.search_field :keyword, value: params[:keyword], class: "form-control w-50 mr-2" %>
+        <%= f.select :tag, [["tag1", 1], ["tag2", 2], ["tag3", 3]], {}, { class: "form-control w-25 mr-2"} %>
+        <%= f.submit "search", class: "btn btn-primary w-25" %>
+      </div>
+    <% end %>
+  </div>
+</div>
 
-<% if @books.any? %>
-  <%= @books.first.attributes %>
-<% end %>
 
-<% @books.each do |book| %>
-  <ul>
-    <li><%= book.isbn %></li>
-    <li><%= link_to book.title, book_path(book.isbn) %></li>
-    <li><%= book.title_kana %></li>
-    <li><%= image_tag book.large_image_url %></li>
-    <li><%= book.item_price %>円</li>
-    <li><%= link_to book.item_url, book.item_url %></li>
-  </ul>
-  <hr>
-<% end %>
+<div class="row">
+  <% @books.each do |book| %>
+    <div class="col-sm-12 col-md-6 col-lg-4">
+      <div class="card mb-3">
+        <div class="card-img-top">
+          <%= image_tag book.large_image_url, style: "width:100%;height:250px;object-fit:contain;" %>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title mb-4" style="height:2em;"><%= link_to truncate(book.title, length: 30), book_path(book.isbn) %></h5>
+          <p class="card-text mb-3" style="height:2em;">著者: <%= truncate(book.author, length: 40) %></p>
+          <p class="card-text">isbnコード: <%= book.isbn %></p>
+          <p class="card-text">価格: <%= book.item_price %>円</p>
+          <p class="card-text">URL: <%= link_to book.item_url, book.item_url %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
 
 <% if @users.present? %>
   <% @users.each do |user| %>

@@ -5,7 +5,7 @@ class Book < ApplicationRecord
   has_many :tags, through: :book_tags
   
   has_many :favorites
-  
+  has_many :reviews, dependent: :destroy
   validates :isbn, presence: true
   
   after_save :tags_update
