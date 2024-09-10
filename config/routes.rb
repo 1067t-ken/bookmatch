@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   scope module: :public do
     root to: 'homes#top'
     get "about" => "homes#about" , as: "about"
+    post "guest_sign_in", to: "users#guest_sign_in", as: "guest_sign_in"
     
     resources :users, only: [:show, :index, :update, :edit, :destroy]
     get 'books', to: "books#index"

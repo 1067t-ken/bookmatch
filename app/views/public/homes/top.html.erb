@@ -21,7 +21,10 @@
      <%= link_to "Log in", new_user_session_path, class: "btn btn-sm btn-primary btn-block mb-3" %>
     </div>
     <div class="row">
-     <%= link_to "Sign up", new_user_registration_path, class: "btn btn-sm btn-success btn-block" %>
+     <%= link_to "Sign up", new_user_registration_path, class: "btn btn-sm btn-success btn-block mb-3" %>
+    </div>
+    <div class="row">
+     <%= link_to "ゲストログイン", guest_sign_in_path, method: :post, class: "btn btn-sm btn-primary btn-block" %>
     </div>
 </div>
 </div>

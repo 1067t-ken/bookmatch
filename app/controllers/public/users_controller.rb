@@ -58,10 +58,19 @@ class Public::UsersController < ApplicationController
     @users = @user.followers.page(params[:page])
   end
   
+  def guest_sign_in
+    @user = User.find_or_initialize_by(email: "guest@test.com")
+    @user.assign_attributes(password: SecureRandom.hex(8), name: "ゲストユーザー")
+    if @user.save
+      sign_in(@user)
+    end
+    redirect_to root_url
+  end
+  
   private
   
   def user_params
-    params.require(:user).permit(:name, :email)
+    params.require(:user).permit(:name, :email, :profile_image)
   end
   
   def correct_user
