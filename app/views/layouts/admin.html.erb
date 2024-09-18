@@ -20,7 +20,7 @@
             <% if admin_signed_in? %>
               <%= link_to 'ユーザー一覧', admin_root_path, class: "nav-item nav-link" %>
               <%= link_to 'レビュー一覧', admin_reviews_path, class: "nav-item nav-link" %>
-              <%= link_to 'コメント一覧', admin_comments_path, class: "nav-item nav-link" %>
+              <%#= link_to 'コメント一覧', admin_comments_path, class: "nav-item nav-link" %>
               <%= link_to 'ログアウト', destroy_admin_session_path, method: :delete, class: "nav-item nav-link" %>
             <% end %>
           </div>

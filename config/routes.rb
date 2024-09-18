@@ -26,7 +26,7 @@ Rails.application.routes.draw do
       end
     end
     resources :reviews, only: [:create]
-    resources :comments, only: [:create]
+    #resources :comments, only: [:create]
   namespace :public do
   resources :users, only: [:edit, :update]
   end
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     root to: "users#index"
     resources :users, only: [:index, :show, :destroy]
     resources :reviews, only: [:index, :destroy]
-    resources :comments, only: [:index, :destroy]
+    #resources :comments, only: [:index, :destroy]
   end
   
 
